@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %} Home {% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+	{{ moment.lang('pt-br') }}
+	<h1>Oi mundão!</h1>
+	<p>
+		A data e hora local são: {{ moment(current_time).format('LLL') }}
+	</p>
+	<p>
+		That was {{ moment(current_time).fromNow(refresh=True) }}
+	</p>
+</div>
+{% endblock %}
