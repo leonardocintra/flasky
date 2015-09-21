@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %} Flasky - Erro 500 {% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+	<h1>Erro HTTP 500 Internal server error (Erro Interno de Servidor)</h1>
+	<p>
+		Este é um erro “catch-all” (pega todos) gerado pelo servidor de rede. Basicamente, algo saiu errado, mas o servidor não pode ser mais específico sobre a condição de erro em sua resposta ao cliente. Além disso, para o erro 500 notificado de volta ao cliente, o servidor de rede deveria gerar algum tipo de registro de erro interno que fornecesse outras informações sobre o que saiu errado. Cabe aos operadores do site do servidor de rede localizarem e analisarem estes registros.
+	</p>
+	<h3>Reparando erros 500 - geral</h3>
+	<p>
+		Este erro somente pode ser resolvido por remendos no software do servidor de rede. Não é um problema do cliente. Cabe aos operadores do site do servidor de rede localizarem e analisarem os registros que dariam outras informações sobre o erro.
+	</p>
+</div>
+{% endblock %}
