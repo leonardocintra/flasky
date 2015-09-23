@@ -2,6 +2,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
+	WTF_CSRF_ENABLED = False
 	SECRET_KEY = os.environ.get('SECRET_KEY') or 'har to guess string'
 	SQLALCHEMY_COMMIT_ON_TEARDOWN = True
 	FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
