@@ -36,4 +36,17 @@ class ChangePasswordForm(Form):
 	submit = SubmitField('Alterar minha senha')
 
 
+class PasswordResetRequestForm(Form):
+	email = StringField('Email', validators=[Required(), Length(1, 64), Email()])
+	submit = SubmitField('Alterar email')
+	
 
+class PasswordResetForm(Form):
+	email = StringField('Email', validators=[Required(), Length(1, 64), Email()])
+	password = PasswordField('Nova senha', validators=[Required(), EqualTo('confirmPassword', message='As senhas devem corresponder.')])
+	confirmPassword = PasswordField('Confirma senha', validators=[Required()])
+	submit = SubmitField('Alterar senha')
+
+	def validate_email(self, field):
+		if User.query.filter_by(email=field.data).first() is None:
+			raise ValidationError('Email não encontrado')
