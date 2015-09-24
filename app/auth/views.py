@@ -4,7 +4,7 @@ from . import auth
 from .. import db
 from ..models import User
 from ..email import send_mail
-from .forms import LoginForm, RegistrationForm
+from .forms import LoginForm, RegistrationForm, ChangePasswordForm
 
 @auth.before_app_request
 def before_request():
@@ -73,3 +73,16 @@ def resend_confirmation():
 	flash('Foi enviado um email de confirmação de cadastro pra você.')
 	return redirect(url_for('main.index'))
 
+@auth.route('/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+	form = ChangePasswordForm()
+	if form.validate_on_submit():
+		if current_user.verify_password(form.old_password.data):
+			current_user.password = form.password.data
+			db.session.add(current_user)
+			flash('Sua senha foi alterada com sucesso!')
+			return redirect(url_for('main.index'))
+		else:
+			flash('Senha inválida')
+	return render_template('auth/change_password.html', form=form)

@@ -27,6 +27,7 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
                 <li><a href="{{ url_for('auth.logout') }}">Sair</a></li>
+                <li><a href="{{ url_for('auth.change_password') }}">Alterar senha</a> </li>
                 {% else %}
                 <li><a href="{{ url_for('auth.login') }}">Entrar</a></li>
                 {% endif %}
