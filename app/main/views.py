@@ -1,7 +1,7 @@
 from flask import render_template, session, redirect, url_for, current_app
 from .. import db
 from ..models import User
-from ..email import send_mail
+from ..email import send_email
 from . import main
 from .forms import NameForm
 
@@ -15,7 +15,7 @@ def index():
             db.session.add(user)
             session['known'] = False
             if current_app.config['FLASKY_ADMIN']:
-                send_mail(current_app.config['FLASKY_ADMIN'], 'Novo usuário',
+                send_email(current_app.config['FLASKY_ADMIN'], 'Novo usuário',
                            'mail/new_user', user=user)
         else:
             session['known'] = True

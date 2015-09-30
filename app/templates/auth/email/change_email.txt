@@ -1,0 +1,7 @@
+<p>Caro {{ user.username }},</p>
+<p>Para confirmar seu novo email <a href="{{ url_for('auth.change_email', token=token, _external=True) }}">clique aqui</a>.</p>
+<p>Caso não de certo, cópie e cole a url abaixo no seu navegador:</p>
+<p>{{ url_for('auth.change_email', token=token, _external=True) }}</p>
+<p>Atenciosamente,</p>
+<p>The Flasky Team</p>
+<p><small>Note: replies to this email address are not monitored.</small></p>

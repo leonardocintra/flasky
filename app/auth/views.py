@@ -3,8 +3,8 @@ from flask.ext.login import login_user, logout_user, login_required, current_use
 from . import auth
 from .. import db
 from ..models import User
-from ..email import send_mail
-from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm
+from ..email import send_email
+from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
 
 @auth.before_app_request
 def before_request():
@@ -49,10 +49,11 @@ def register():
 		db.session.add(user)
 		db.session.commit()
 		token = user.generate_confirmation_token()
-		send_mail(user.email, 'Confirme sua conta', 'auth/email/confirm', user=user, token=token)
+		send_email(user.email, 'Confirme sua conta', 'auth/email/confirm', user=user, token=token)
 		flash('Foi enviado um email de confirmação de cadastro pra você.')
 		return redirect(url_for('main.index'))
 	return render_template('auth/register.html', form=form)
+
 
 @auth.route('/confirm/<token>')
 @login_required
@@ -70,7 +71,7 @@ def confirm(token):
 @login_required
 def resend_confirmation():
 	token = current_user.generate_confirmation_token()
-	send_mail(current_user.email, 'Confirme sua conta', 'auth/email/confirm', user=current_user, token=token)
+	send_email(current_user.email, 'Confirme sua conta', 'auth/email/confirm', user=current_user, token=token)
 	flash('Foi enviado um email de confirmação de cadastro pra você.')
 	return redirect(url_for('main.index'))
 
@@ -99,7 +100,7 @@ def password_reset_request():
 		user = User.query.filter_by(email=form.email.data).first()
 		if user:
 			token = user.generate_reset_token()
-			send_mail(user.email, 'Altere sua senha', 'auth/email/reset_password',
+			send_email(user.email, 'Altere sua senha', 'auth/email/reset_password',
 						user=user, token=token, next=request.args.get('next'))
 		flash('Um email com instruções para alterar a senha foi enviado para você')
 		return redirect(url_for('auth.login'))
@@ -121,4 +122,34 @@ def password_reset(token):
 		else:
 			return redirect(url_for('main.index'))
 	return render_template('auth/reset_password.html', form=form)
+
+
+@auth.route('/change-email', methods=['GET', 'POST'])
+@login_required
+def change_email_request():
+	form = ChangeEmailForm()
+	if form.validate_on_submit():
+		if current_user.verify_password(form.password.data):
+			new_email = form.email.data
+			token = current_user.generate_email_change_token(new_email)
+			send_email(new_email, 
+					'Confirme seu endereço de email', 
+					'auth/email/change_email',
+					user=current_user,
+					token=token)
+			flash('Um email com instruções para confirmar seu novo email foi enviado pra você.')
+			return redirect(url_for('main.index'))
+		else:
+			flash('Email ou senha inválida.')
+	return render_template("auth/change_email.html", form=form)
+	
+
+@auth.route('/change-email/<token>')
+@login_required
+def change_email(token):
+	if current_user.change_email(token):
+		flash('Seu email foi atualizado com sucesso!')
+	else:
+		flash('Requisição inválida')
+	return redirect(url_for('main.index'))
 
