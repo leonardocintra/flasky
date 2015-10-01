@@ -4,6 +4,41 @@
 
 {% block page_content %}
 <div class="page-header">
-	<h1>Ola {{ name }}</h1>
+	<h1>{{ user.username }}</h1>
+	{% if user.name or user.location %}
+	<p>
+		{% if user.name %} {{ user.name }} {% endif %}
+		<br />
+		{% if user.location %}
+			Localização: <a href="http://maps.google.com/?q={{ user.location }}">{{ user.location }}</a>
+		{% endif %}
+	</p>
+	{% endif %}
+
+	{% if current_user.is_administrator() %}
+	<p>
+		<a href="mailto:{{ user.email }}">{{ user.email }}</a>
+	</p>
+	{% endif %}
+
+	{% if user.about_me %}
+	<p>
+		{{ user.about_me }}
+	</p>
+	{% endif %}
+
+	<p>
+		Membro desde {{ moment(user.member_since).format('L') }}. <br />
+		Ultima visita {{ moment(user.last_seen).fromNow() }}
+	</p>
+
+	<p>
+	{% if user == current_user %}
+		<a href="{{ url_for('.edit_profile') }}" class="btn btn-default">Editar meus dados cadastrais</a>
+	{% endif %}
+	{% if current_user.is_administrator() %}
+		<a href="{{ url_for('.edit_profile_admin', id=user.id) }}" class="btn btn-danger">Editar meus dados cadastrais [Admin]</a>
+	{% endif %}
+	</p>
 </div>
 {% endblock %}

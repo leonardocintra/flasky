@@ -1,12 +1,9 @@
-Caro {{ user.username}}
-
-Bem vindo ao FLasky
-
-Para confirmar a criação de sua conta, por favor clique no link abaixo:
-
-{{ url_for('auth.confirm', token=token, _external=True) }}
-
-Atenciosamente
-Equipe Flasy
-
-Atenção: responder esse email não esta sendo monitorado.
+<p>Caro {{ user.username }},</p>
+<p>Bem vindo ao <b>Flasky</b>!</p>
+<p>Para confirmar sua conta <a href="{{ url_for('auth.confirm', token=token, _external=True) }}">clique aqui</a>.</p>
+<p>Ou cole o link no seu navegador:</p>
+<p>{{ url_for('auth.confirm', token=token, _external=True) }}</p>
+<br />
+<p>Atenciosamente,</p>
+<p>The Flasky Team</p>
+<p><small>Note: replies to this email address are not monitored.</small></p>
