@@ -12,25 +12,25 @@ class NameForm(Form):
 
 
 class EditProfileForm(Form):
-    name = StringField('Real name', validators=[Length(0, 64)])
-    location = StringField('Location', validators=[Length(0, 64)])
-    about_me = TextAreaField('About me')
-    submit = SubmitField('Submit')
+    name = StringField('Nome', validators=[Length(0, 64)])
+    location = StringField('Localização', validators=[Length(0, 64)])
+    about_me = TextAreaField('Sobre mim')
+    submit = SubmitField('Salvar')
 
 
 class EditProfileAdminForm(Form):
     email = StringField('Email', validators=[Required(), Length(1, 64),
                                              Email()])
-    username = StringField('Username', validators=[
+    username = StringField('Usuário', validators=[
         Required(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
                                           'Usernames must have only letters, '
                                           'numbers, dots or underscores')])
     confirmed = BooleanField('Confirmed')
     role = SelectField('Role', coerce=int)
-    name = StringField('Real name', validators=[Length(0, 64)])
-    location = StringField('Location', validators=[Length(0, 64)])
-    about_me = TextAreaField('About me')
-    submit = SubmitField('Submit')
+    name = StringField('Nome', validators=[Length(0, 64)])
+    location = StringField('Localização', validators=[Length(0, 64)])
+    about_me = TextAreaField('Sobre mim')
+    submit = SubmitField('Salvar')
 
     def __init__(self, user, *args, **kwargs):
         super(EditProfileAdminForm, self).__init__(*args, **kwargs)
@@ -41,14 +41,14 @@ class EditProfileAdminForm(Form):
     def validate_email(self, field):
         if field.data != self.user.email and \
                 User.query.filter_by(email=field.data).first():
-            raise ValidationError('Email already registered.')
+            raise ValidationError('Esse email ja consta registrado.')
 
     def validate_username(self, field):
         if field.data != self.user.username and \
                 User.query.filter_by(username=field.data).first():
-            raise ValidationError('Username already in use.')
+            raise ValidationError('Esse usuário ja esta em uso.')
 
 
 class PostForm(Form):
     body = PageDownField("What's on your mind?", validators=[Required()])
-    submit = SubmitField('Submit')
+    submit = SubmitField('Salvar')
