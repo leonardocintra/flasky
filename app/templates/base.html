@@ -6,6 +6,7 @@
 {{ super() }}
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 {% endblock %}
 
 {% block navbar %}
@@ -24,17 +25,19 @@
             <ul class="nav navbar-nav">
                 <li><a href="{{ url_for('main.index') }}">Home</a></li>
                 {% if current_user.is_authenticated %}
-                <li>
-                    <a href="{{ url_for('main.user', username=current_user.username) }}">Perfil</a>
-                </li>
+                <li><a href="{{ url_for('main.user', username=current_user.username) }}">Perfil</a></li>
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Minha conta <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="{{ current_user.gravatar(size=18) }}">
+                        Account <b class="caret"></b>
+                    </a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ url_for('auth.change_password') }}">Alterar senha</a> </li>
+                        <li><a href="{{ url_for('auth.change_password') }}">Alterar senha</a></li>
+                        <li><a href="{{ url_for('auth.change_email_request') }}">Alterar Email</a></li>
                         <li><a href="{{ url_for('auth.logout') }}">Sair</a></li>
                     </ul>
                 </li>
@@ -49,15 +52,14 @@
 
 {% block content %}
 <div class="container">
-	{% for message in get_flashed_messages() %}
+    {% for message in get_flashed_messages() %}
     <div class="alert alert-warning">
-    	<button type="button" class="close" data-dismiss="alert">&times;</button>
-    	{{ message }}
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
     </div>
     {% endfor %}
 
-    {% block page_content %}
-    {% endblock %}
+    {% block page_content %}{% endblock %}
 </div>
 {% endblock %}
 
