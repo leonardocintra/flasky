@@ -8,7 +8,7 @@ from ..models import User
 class LoginForm(Form):
     email = StringField('Email', validators=[Required(), Length(1, 64),
                                              Email()])
-    password = PasswordField('Password', validators=[Required()])
+    password = PasswordField('Senha', validators=[Required()])
     remember_me = BooleanField('Keep me logged in')
     submit = SubmitField('Log In')
 
@@ -16,14 +16,14 @@ class LoginForm(Form):
 class RegistrationForm(Form):
     email = StringField('Email', validators=[Required(), Length(1, 64),
                                            Email()])
-    username = StringField('Username', validators=[
+    username = StringField('Usuário', validators=[
         Required(), Length(1, 64), Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
                                           'Usernames must have only letters, '
                                           'numbers, dots or underscores')])
-    password = PasswordField('Password', validators=[
+    password = PasswordField('Senha', validators=[
         Required(), EqualTo('password2', message='Passwords must match.')])
-    password2 = PasswordField('Confirm password', validators=[Required()])
-    submit = SubmitField('Register')
+    password2 = PasswordField('Confirma senha', validators=[Required()])
+    submit = SubmitField('Registrar')
 
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
@@ -35,17 +35,17 @@ class RegistrationForm(Form):
 
 
 class ChangePasswordForm(Form):
-    old_password = PasswordField('Old password', validators=[Required()])
-    password = PasswordField('New password', validators=[
+    old_password = PasswordField('Senha atual', validators=[Required()])
+    password = PasswordField('Nova senha', validators=[
         Required(), EqualTo('password2', message='Passwords must match')])
-    password2 = PasswordField('Confirm new password', validators=[Required()])
-    submit = SubmitField('Update Password')
+    password2 = PasswordField('Confirma nova senha', validators=[Required()])
+    submit = SubmitField('Atualizar minha senha')
 
 
 class PasswordResetRequestForm(Form):
     email = StringField('Email', validators=[Required(), Length(1, 64),
                                              Email()])
-    submit = SubmitField('Reset Password')
+    submit = SubmitField('Recuperar minha senha')
 
 
 class PasswordResetForm(Form):

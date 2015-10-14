@@ -93,10 +93,10 @@ def change_password():
         if current_user.verify_password(form.old_password.data):
             current_user.password = form.password.data
             db.session.add(current_user)
-            flash('Your password has been updated.')
+            flash('Sua senha foi alterada com sucesso!.')
             return redirect(url_for('main.index'))
         else:
-            flash('Invalid password.')
+            flash('Senha inválida.')
     return render_template("auth/change_password.html", form=form)
 
 
