@@ -96,6 +96,11 @@ class User(UserMixin, db.Model):
     def password(self):
         raise AttributeError('password is not a readable attribute')
 
+    @property
+    def followed_posts(self):
+         return Post.query.join(Follow, Follow.followed_id == Post.author_id).filter(Follow.follower_id == self.id)
+    
+
     @password.setter
     def password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -159,8 +164,7 @@ class User(UserMixin, db.Model):
         return True
 
     def can(self, permissions):
-        return self.role is not None and \
-            (self.role.permissions & permissions) == permissions
+        return self.role is not None and (self.role.permissions & permissions) == permissions
 
     def is_administrator(self):
         return self.can(Permission.ADMINISTER)
